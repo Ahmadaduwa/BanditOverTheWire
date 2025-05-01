@@ -1,0 +1,45 @@
+# Bandit Level 5 → Level 6 - OverTheWire
+
+> Difficulty: Easy | Category: Linux / File Discovery
+
+## 🧠 Challenge Description
+The password for the next level is stored in a file somewhere under the `inhere` directory and has all of the following properties:
+
+- It is **human-readable**
+- It is **exactly 1033 bytes** in size
+- It is **not executable**
+
+## 🛠️ Tools Used
+- Command Prompt (cmd)
+- SSH
+- Linux utilities: `find`, `file`, `du`, `cat`
+
+## 🔍 Steps / Walkthrough
+
+1. SSH into the server using the password from Level 5:
+    ```bash
+    ssh bandit5@bandit.labs.overthewire.org -p 2220
+    ```
+
+2. Use `find` to search for the file with the required properties:
+    ```bash
+    find inhere -type f -size 1033c ! -executable
+    ```
+
+3. Confirm it's a human-readable file (optional but good practice):
+    ```bash
+    file inhere/maybehere07/.file2
+    ```
+
+4. View the contents of the file to get the password:
+    ```bash
+    cat inhere/maybehere07/.file2
+    ```
+
+5. You'll see the password for Level 6:
+    ```
+    HWasnPhtq9AVKe0dmk45nxy20cvUa6EG
+    ```
+
+## 🔑 Password to Level 6
+HWasnPhtq9AVKe0dmk45nxy20cvUa6EG

@@ -1,0 +1,43 @@
+# Bandit Level 4 → Level 5 - OverTheWire
+
+> Difficulty: Very Easy | Category: Linux / SSH
+
+## 🧠 Challenge Description
+The password for the next level is stored in the only human-readable file in the `inhere` directory. To identify it, you may use the `file` command to determine file types.
+
+## 🛠️ Tools Used
+- Command Prompt (cmd)
+- SSH
+- `file` command
+
+## 🔍 Steps / Walkthrough
+
+1. SSH into the machine using the password from Level 4:
+    ```bash
+    ssh bandit4@bandit.labs.overthewire.org -p 2220
+    ```
+
+2. Navigate to the `inhere` directory:
+    ```bash
+    cd inhere
+    ```
+
+3. Use the `file` command to check the type of each file:
+    ```bash
+    file ./*
+    ```
+
+4. Identify the file that is ASCII text (e.g., `-file07`).
+
+5. Read the contents of the file:
+    ```bash
+    cat ./-file07
+    ```
+
+6. The password for Level 5 will be displayed:
+    ```
+    4oQYVPkxZOOEOO5pTW81FB8j8lxXGUQw
+    ```
+
+## 🔑 Password to Level 5
+4oQYVPkxZOOEOO5pTW81FB8j8lxXGUQw

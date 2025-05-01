@@ -1,0 +1,40 @@
+# Bandit Level 3 → Level 4 - OverTheWire
+
+> Difficulty: Very Easy | Category: Linux / SSH
+
+## 🧠 Challenge Description
+The password for the next level is stored in a hidden file in the `inhere` directory.
+
+## 🛠️ Tools Used
+- Command Prompt (cmd)
+- SSH
+
+## 🔍 Steps / Walkthrough
+
+1. SSH into the machine using the password from Level 3:
+    ```bash
+    ssh bandit3@bandit.labs.overthewire.org -p 2220
+    ```
+
+2. Navigate to the `inhere` directory:
+    ```bash
+    cd inhere
+    ```
+
+3. List all files, including hidden ones:
+    ```bash
+    ls -a
+    ```
+
+4. View the contents of the hidden file (name starts with a dot):
+    ```bash
+    cat .hidden
+    ```
+
+5. You will get the password for Level 4:
+    ```
+    2WmrDFRmJIq3IPxneAaMGhap0pFhF3NJ
+    ```
+
+## 🔑 Password to Level 4
+2WmrDFRmJIq3IPxneAaMGhap0pFhF3NJ

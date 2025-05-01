@@ -1,0 +1,35 @@
+# Bandit Level 2 → Level 3 - OverTheWire
+
+> Difficulty: Very Easy | Category: Linux / SSH
+
+## 🧠 Challenge Description
+The password for the next level is stored in a file called `spaces in this filename` located in the home directory. Spaces in filenames can be tricky to handle, so take care when referencing it.
+
+## 🛠️ Tools Used
+- Command Prompt (cmd)
+- SSH
+
+## 🔍 Steps / Walkthrough
+
+1. SSH into the machine using the password from Level 2:
+    ```bash
+    ssh bandit2@bandit.labs.overthewire.org -p 2220
+    ```
+
+2. List files in the home directory:
+    ```bash
+    ls
+    ```
+
+3. Read the file with spaces in its name using quotes:
+    ```bash
+    cat "spaces in this filename"
+    ```
+
+4. You will get the password for Level 3:
+    ```
+    MNk8KNH3Usiio41PRUEoDFPqfxLPlSmx
+    ```
+
+## 🔑 Password to Level 3
+MNk8KNH3Usiio41PRUEoDFPqfxLPlSmx

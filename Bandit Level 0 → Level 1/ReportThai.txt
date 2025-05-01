@@ -1,0 +1,35 @@
+# Bandit Level 0 - OverTheWire
+
+> Difficulty: Very Easy | Category: Linux / SSH
+
+## 🧠 Challenge Description
+Login to the server using SSH. The password for the next level is stored in a file called `readme` in the home directory.
+
+## 🛠️ Tools Used
+- Command Prompt (cmd)
+- SSH
+
+## 🔍 Steps / Walkthrough
+
+1. ใช้ SSH เพื่อเข้าเครื่อง:
+    ```bash
+    ssh bandit0@bandit.labs.overthewire.org -p 2220
+    ```
+
+2. ตรวจสอบไฟล์ใน home directory:
+    ```bash
+    ls
+    ```
+
+3. อ่านไฟล์ `readme`:
+    ```bash
+    cat readme
+    ```
+
+4. ได้ password สำหรับเข้าสู่ Level 1:
+    ```
+    ZjLjTmM6FvvyRnrb2rfNWOZOTa6ip5If
+    ```
+
+## 🔑 Password to Level 1
+ZjLjTmM6FvvyRnrb2rfNWOZOTa6ip5If

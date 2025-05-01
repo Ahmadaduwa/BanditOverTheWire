@@ -1,0 +1,35 @@
+# Bandit Level 1 → Level 2 - OverTheWire
+
+> Difficulty: Very Easy | Category: Linux / SSH
+
+## 🧠 Challenge Description
+The password for the next level is stored in a file called `-`, located in the home directory. Use SSH to log in and retrieve the password.
+
+## 🛠️ Tools Used
+- Command Prompt (cmd)
+- SSH
+
+## 🔍 Steps / Walkthrough
+
+1. SSH into the machine using the password from Level 0:
+    ```bash
+    ssh bandit1@bandit.labs.overthewire.org -p 2220
+    ```
+
+2. List files in the home directory:
+    ```bash
+    ls
+    ```
+
+3. Read the file named `-` (use `./-` to avoid it being interpreted as a flag):
+    ```bash
+    cat ./-
+    ```
+
+4. You will get the password for Level 2:
+    ```
+    263JGJPfgU6LtdEvgfWU1XP5yac29mFx
+    ```
+
+## 🔑 Password to Level 2
+263JGJPfgU6LtdEvgfWU1XP5yac29mFx

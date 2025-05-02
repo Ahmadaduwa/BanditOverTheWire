@@ -11,7 +11,7 @@ The password for the next level is stored in a file called `spaces in this filen
 
 ## 🔍 Steps / Walkthrough
 
-1. SSH into the machine using the password from Level 2:
+1. SSH into the machine using the password from Level 1:
     ```bash
     ssh bandit2@bandit.labs.overthewire.org -p 2220
     ```

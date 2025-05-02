@@ -16,7 +16,7 @@ The password for the next level is stored in a file somewhere under the `inhere`
 
 ## 🔍 Steps / Walkthrough
 
-1. SSH into the server using the password from Level 5:
+1. SSH into the server using the password from Level 4:
     ```bash
     ssh bandit5@bandit.labs.overthewire.org -p 2220
     ```

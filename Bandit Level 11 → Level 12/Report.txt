@@ -1,0 +1,41 @@
+# 🔐 Bandit Level 11 → Level 12 - OverTheWire
+
+> **Difficulty:** Easy  
+> **Category:** Linux / Text Transformation  
+> **Challenge Goal:** Apply a ROT13 transformation to retrieve the password.
+
+---
+
+## 🖥️ Tools Used
+
+- SSH
+- Linux Commands:
+  - `ls`
+  - `cat`
+  - `tr`
+
+---
+
+## 🚀 Steps to Solve
+
+1. **Connect via SSH**  
+   Use the password from Level 10:
+   ```bash
+   ssh bandit11@bandit.labs.overthewire.org -p 2220
+    ```
+
+2. List files
+    ```bash
+    ls
+    ```
+
+3. Apply ROT13 transformation
+    ```bash
+    cat data.txt | tr [a-zA-Z] [n-za-mN-ZA-M]
+    ```
+4. You will get the password:
+    7x16WNeHIi5YkIhWsfFIqoognUTyj9Q4
+    
+
+🔑 Password to Level 12
+7x16WNeHIi5YkIhWsfFIqoognUTyj9Q4

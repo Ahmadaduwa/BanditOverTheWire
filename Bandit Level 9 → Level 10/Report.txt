@@ -1,0 +1,41 @@
+# 🔐 Bandit Level 9 → Level 10 - OverTheWire
+
+> **Difficulty:** Easy  
+> **Category:** Linux / Binary Data  
+> **Challenge Goal:** Find a human-readable string containing the password in a binary file.
+
+---
+
+## 🖥️ Tools Used
+
+- SSH
+- Linux Commands:
+  - `strings`
+  - `grep`
+  - `ls`
+
+---
+
+## 🚀 Steps to Solve
+
+1. **Connect via SSH**  
+   Use the password from Level 8:
+   ```bash
+   ssh bandit9@bandit.labs.overthewire.org -p 2220
+    ```
+
+2. List files
+    ```bash
+    ls
+    ```
+
+3. Extract readable strings and find the password
+    ```bash
+    strings data.txt | grep ==
+    ```
+4. You will get the password:
+    FGUW5ilLVJrxX9kMYMmlN4MgbpfMiqey
+    
+
+🔑 Password to Level 10
+FGUW5ilLVJrxX9kMYMmlN4MgbpfMiqey

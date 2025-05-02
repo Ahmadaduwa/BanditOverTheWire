@@ -1,0 +1,40 @@
+# 🔐 Bandit Level 10 → Level 11 - OverTheWire
+
+> **Difficulty:** Easy  
+> **Category:** Linux / Text Decoding  
+> **Challenge Goal:** Decode a file encoded in base64 to retrieve the password.
+
+---
+
+## 🖥️ Tools Used
+
+- SSH
+- Linux Commands:
+  - `ls`
+  - `base64`
+
+---
+
+## 🚀 Steps to Solve
+
+1. **Connect via SSH**  
+   Use the password from Level 9:
+   ```bash
+   ssh bandit10@bandit.labs.overthewire.org -p 2220
+    ```
+
+2. List files
+    ```bash
+    ls
+    ```
+
+3. Decode the base64-encoded file
+    ```bash
+    base64 data.txt -d
+    ```
+4. You will get the password:
+    dtR173fZKb0RRsDFSGsg2RWnpNVj3qRr
+    
+
+🔑 Password to Level 11
+dtR173fZKb0RRsDFSGsg2RWnpNVj3qRr

@@ -1,0 +1,53 @@
+# Bandit Level 6 → Level 7 - OverTheWire
+
+> **Difficulty:** Easy  
+> **Category:** Linux / File Discovery
+
+---
+
+## 🧠 Challenge Description
+
+The password for the next level is stored in a file somewhere under the **root (`/`) directory**. The file meets all of the following conditions:
+
+- It is **owned by user** `bandit7`
+- It is **owned by group** `bandit6`
+- It is **exactly 33 bytes** in size
+- It is a **regular file** (not a directory or symlink)
+
+---
+
+## 🛠️ Tools Used
+
+- SSH
+- Linux Commands:
+  - `find`
+  - `cat`
+
+---
+
+## 🔍 Steps / Walkthrough
+
+1. SSH into the server using the password from Level 5:
+    ```bash
+    ssh bandit6@bandit.labs.overthewire.org -p 2220
+    ```
+
+2. Use the find command to locate the target file:
+    ```bash
+    find / -type f -user bandit7 -group bandit6 -size 33c 2>/dev/null
+    ```
+
+3. The correct file path should be displayed. For example:
+    /var/lib/dpkg/info/bandit7.password
+
+
+4. Use cat to read the contents of the file:
+    ```bash
+    cat /var/lib/dpkg/info/bandit7.password
+    ```
+
+5. You’ll see the password for the next level:
+    morbNTDkSW6jIlUc0ymOdMaLnOlFVAaj
+
+🔑 Password to Level 7
+morbNTDkSW6jIlUc0ymOdMaLnOlFVAaj

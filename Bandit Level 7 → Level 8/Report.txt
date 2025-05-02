@@ -1,0 +1,42 @@
+# Bandit Level 7 → Level 8 - OverTheWire
+
+> **Difficulty:** Easy  
+> **Category:** Linux / Text Searching
+
+---
+
+## 🧠 Challenge Description
+
+The password for the next level is stored in the file `data.txt`. It is the **only line** in the file that contains the word `"millionth"`.
+
+---
+
+## 🛠️ Tools Used
+
+- SSH
+- Linux Command:
+  - `grep`
+
+---
+
+## 🔍 Steps / Walkthrough
+
+1. SSH into the server using the password from Level 6:
+    ```bash
+    ssh bandit7@bandit.labs.overthewire.org -p 2220
+    ```
+
+2. List files in the home directory:
+    ```bash
+    ls
+    ```
+
+3. Use grep to find the line that contains the word "millionth":
+    ```bash
+    grep "millionth" data.txt
+    ```
+4. You will get the password:
+    dfwvzFQi4mU0wfNbFOe9RoWskMLg7eEc
+
+🔑 Password to Level 8
+dfwvzFQi4mU0wfNbFOe9RoWskMLg7eEc

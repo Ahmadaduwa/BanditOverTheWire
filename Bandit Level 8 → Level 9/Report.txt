@@ -1,0 +1,40 @@
+# 🔐 Bandit Level 8 → Level 9 - OverTheWire
+
+> **Difficulty:** Easy  
+> **Category:** Linux / Text Processing  
+> **Challenge Goal:** Find the only line in `data.txt` that occurs only once.
+
+---
+
+## 🖥️ Tools Used
+
+- SSH
+- Linux Commands:
+  - `sort`
+  - `uniq`
+  - `ls`
+
+---
+
+## 🚀 Steps to Solve
+
+1. **Connect via SSH**  
+   Use the password from Level 7:
+   ```bash
+   ssh bandit8@bandit.labs.overthewire.org -p 2220
+    ```
+
+2. List files
+    ```bash
+    ls
+    ```
+
+3. Find the unique line
+    ```bash
+    sort data.txt | uniq -u
+    ```
+4. You will get the password:
+    4CKMh1JI91bUIZZPXDqGanal4xvAg0JM
+
+🔑 Password to Level 9
+4CKMh1JI91bUIZZPXDqGanal4xvAg0JM

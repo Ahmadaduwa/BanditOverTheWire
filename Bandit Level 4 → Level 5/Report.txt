@@ -12,7 +12,7 @@ The password for the next level is stored in the only human-readable file in the
 
 ## 🔍 Steps / Walkthrough
 
-1. SSH into the machine using the password from Level 4:
+1. SSH into the machine using the password from Level 3:
     ```bash
     ssh bandit4@bandit.labs.overthewire.org -p 2220
     ```

@@ -1,0 +1,70 @@
+# Bandit Level 13 → Level 14
+
+## Overview
+
+In this challenge (Level 13), our goal is to retrieve the password for the `bandit14` 
+account by utilizing a private SSH key located in the `bandit13` user's directory. 
+After obtaining the key, we will use it to establish an SSH connection to the server 
+and extract the password for Level 14.
+
+## Objective
+
+* Log in as **bandit13**
+* Locate and read the private SSH key file (`sshkey.private`)
+* Use the private key to SSH into the **bandit14** account
+* Obtain the Level 14 password
+
+## Tools Used
+
+* SSH client (e.g., `ssh` on Linux/macOS or PuTTY on Windows)
+* Basic Linux commands: `ls`, `cat`
+
+## Steps to Solve
+
+1. **SSH into the bandit13 account**
+
+   ```bash
+   ssh bandit13@bandit.labs.overthewire.org -p 2220
+   ```
+
+   *Use the password obtained from Level 12.*
+
+2. **List the files in the home directory**
+
+   ```bash
+   ls -la
+   ```
+
+   *Identify the `sshkey.private` file.*
+
+3. **Display the contents of the private key**
+
+   ```bash
+   cat sshkey.private
+   ```
+
+   *Copy the entire key text.*
+
+4. **Use the private key to SSH into bandit14**
+
+   ```bash
+   ssh -i sshkey.private bandit14@bandit.labs.overthewire.org -p 2220
+   ```
+
+5. **Retrieve the Level 14 password**
+   Once logged in, the password will be displayed in the terminal.
+
+## Level 14 Password
+
+```
+MU4VWeTyJk8ROof1qqmcBPaLh7lDCPvS
+```
+
+## Conclusion
+
+Successfully extracted the `bandit14` account password by using the private SSH key found in
+ the `bandit13` environment. This password can now be used to proceed to Level 14.
+
+---
+
+*Report by: pae_adwaa

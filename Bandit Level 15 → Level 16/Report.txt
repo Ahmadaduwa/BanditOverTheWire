@@ -1,0 +1,59 @@
+# Bandit Level 15 → Level 16
+
+## Overview
+
+In this challenge (Level 15), our goal is to connect securely to the local service on port 30001
+ using an SSL/TLS client (`openssl s_client`), provide the Level 15 password, and retrieve the 
+ Level 16 password from the service response.
+
+## Objective
+
+* SSH into **bandit15**
+* Establish an SSL/TLS connection to the service on port 30001
+* Supply the Level 15 password
+* Capture the Level 16 password from the encrypted service output
+
+## Tools Used
+
+* SSH client (`ssh`)
+* OpenSSL command-line tool (`openssl s_client`)
+
+## Steps to Solve
+
+1. **SSH into the bandit15 account**
+
+   ```bash
+   ssh bandit15@bandit.labs.overthewire.org -p 2220
+   ```
+
+   *Use the password obtained from Level 14.*
+
+2. **Connect to the encrypted service with OpenSSL**
+
+   ```bash
+   openssl s_client -connect localhost:30001
+   ```
+
+3. **Enter the Level 15 password**
+   When prompted by the service, paste:
+
+   ```text
+   8xCjnmgoKbGLhHFAZlGE5Tmu4M2tKJQo
+   ```
+
+4. **Read the output**
+   The SSL/TLS session will display the Level 16 password at the end of the connection.
+
+## Level 16 Password
+
+```
+ kSkvUpMQ7lBYyCM4GBPvCvT1BfWRy0Dx
+```
+
+## Conclusion
+
+By using `openssl s_client` to establish an SSL/TLS connection to the local service on port 30001 and providing the correct Level 15 credentials, we successfully retrieved the **bandit16** account password. This password can now be used to proceed to Level 16.
+
+---
+
+*Report by: pae_adwaa

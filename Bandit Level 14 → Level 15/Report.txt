@@ -1,0 +1,57 @@
+# Bandit Level 14 → Level 15
+
+## Overview
+
+In this challenge (Level 14), our goal is to connect to the local Telnet service running on port 30000 of the `bandit14` environment, supply the Level 14 password, and retrieve the Level 15 password.
+
+## Objective
+
+* SSH into **bandit14**
+* Connect to the local Telnet service on port 30000
+* Provide the Level 14 password
+* Capture the Level 15 password from the service response
+
+## Tools Used
+
+* SSH client (`ssh`)
+* Telnet client (`telnet`)
+
+## Steps to Solve
+
+1. **SSH into the bandit14 account**
+
+   ```bash
+   ssh bandit14@bandit.labs.overthewire.org -p 2220
+   ```
+
+   *Use the password obtained from Level 13.*
+
+2. **Run Telnet against localhost on port 30000**
+
+   ```bash
+   telnet localhost 30000
+   ```
+
+3. **Enter the Level 14 password**
+   When prompted, paste:
+
+   ```text
+   MU4VWeTyJk8ROof1qqmcBPaLh7lDCPvS
+   ```
+
+4. **Read the output**
+   The Telnet service will respond with the Level 15 password.
+
+## Level 15 Password
+
+```
+8xCjnmgoKbGLhHFAZlGE5Tmu4M2tKJQo
+```
+
+## Conclusion
+
+Successfully retrieved the `bandit15` account password by connecting to the local Telnet service on port 30000 and providing the correct Level 14 credentials. This password can now be used to proceed to Level 15.
+
+---
+
+*Report by: pae_adwaa

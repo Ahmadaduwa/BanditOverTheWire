@@ -1,0 +1,23 @@
+# OverTheWire Bandit Level 21 → Level 22
+
+**Difficulty:** - 
+**Category:** 
+**Challenge Goal:** 
+
+**Tools Used:**
+
+
+
+**Steps to Solve:**
+
+1.  **Access bandit21 via SSH:**
+    ```bash
+    ssh bandit21@bandit.labs.overthewire.org -p 2220
+    ```
+    
+
+
+
+**Conclusion:**
+
+EeoULMCra2q0dSkYj561DX7s1CpBuOBt

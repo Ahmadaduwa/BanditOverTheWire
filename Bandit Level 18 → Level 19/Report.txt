@@ -1,0 +1,30 @@
+# OverTheWire Bandit Level 18 → Level 19
+
+**Difficulty:** - (Implicitly easy)
+**Category:** File Content Retrieval
+
+**Challenge Goal:** Obtain the password for the bandit19 user.
+
+**Tools Used:**
+
+* `ssh`
+* `cat` (executed remotely via SSH)
+
+**Steps to Solve:**
+
+1.  **Access bandit18 and read the `readme` file:**
+    ```bash
+    ssh -t bandit18@bandit.labs.overthewire.org -p 2220 "cat readme"
+    x2gLTTjFwMOhQ8oWNbMN362QKxfRqGlO
+    ```
+    This command establishes an SSH connection to the bandit18 server on port 2220. The `-t` flag forces pseudo-terminal allocation, which can be useful for executing commands that might expect interactive input (though not strictly necessary here). The command `"cat readme"` is executed on the remote server, displaying the content of the file named `readme`. You were prompted for the password for bandit18, which you correctly provided as `x2gLTTjFwMOhQ8oWNbMN362QKxfRqGlO`.
+
+2.  **Retrieve the password for bandit19:**
+    The output of the `cat readme` command on the bandit18 server directly revealed the password for the next level:
+    ```
+    cGWpMaKXVwDUNgPAVJbWYuGHVn9zl3j8
+    ```
+
+**Conclusion:**
+
+The password for bandit level 19 (`cGWpMaKXVwDUNgPAVJbWYuGHVn9zl3j8`) was found within the `readme` file located in the home directory of the bandit18 user. The `ssh` command was used to remotely execute the `cat` command and retrieve the password.

@@ -1,0 +1,51 @@
+# OverTheWire Bandit Level 17 → Level 18
+
+**Difficulty:** - (Implicitly easy, based on the straightforward solution)
+**Category:** Password Retrieval
+
+**Challenge Goal:** Obtain the password for the bandit18 user.
+
+**Tools Used:**
+
+* `ssh`
+* `diff`
+
+**Steps to Solve:**
+
+1.  **Access bandit17 via SSH:**
+    ```bash
+    ssh -i bandit17ssh.txt bandit17@bandit.labs.overthewire.org -p 2220
+    ```
+    This command establishes a secure shell connection to the bandit17 server using the provided private key `bandit17ssh.txt` on port 2220.
+
+2.  **Examine the differences between password files:**
+    ```bash
+    diff passwords.new passwords.old
+    ```
+    The challenge description for Level 17 hints that the password for the next level is stored in a file named `passwords.new` and that the previous password is in `passwords.old`. The `diff` command highlights the differences between these two files.
+
+3.  **Identify the new password:**
+    The output of the `diff` command reveals the following:
+    ```
+    42c42
+    < x2gLTTjFwMOhQ8oWNbMN362QKxfRqGlO
+    ---
+    > C6XNBdYOkgt5ARXESMKWWOUwBeaIQZ0Y
+    ```
+    The line starting with `<` indicates the content unique to `passwords.new`, which is the password for bandit18: `x2gLTTjFwMOhQ8oWNbMN362QKxfRqGlO`.
+
+4.  **Attempt SSH connection to bandit18:**
+    ```bash
+    ssh bandit18@bandit.labs.overthewire.org -p 2220
+    ```
+    This command initiates an SSH connection to the bandit18 server.
+
+5.  **Authenticate with the retrieved password:**
+    When prompted for the password, enter `x2gLTTjFwMOhQ8oWNbMN362QKxfRqGlO`.
+
+6.  **Verification of Success:**
+    If the authentication is successful, you will receive a welcome message and the level will be considered solved. The "byeBye" message you mentioned likely confirms a successful login.
+
+**Conclusion:**
+
+The password for bandit level 18 was successfully retrieved by comparing the contents of the `passwords.new` and `passwords.old` files using the `diff` command. This password was then used to establish an SSH connection to the bandit18 user, completing the challenge.

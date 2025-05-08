@@ -1,0 +1,60 @@
+# OverTheWire Bandit Level 19 → Level 20
+
+**Difficulty:** - (Medium, involving understanding SUID bits and environment variables)
+**Category:** Privilege Escalation
+
+**Challenge Goal:** Obtain the password for the bandit20 user.
+
+**Tools Used:**
+
+* `ssh`
+* `ls`
+* Executing a provided binary
+
+**Steps to Solve:**
+
+1.  **Access bandit19 via SSH:**
+    ```bash
+    ssh bandit19@bandit.labs.overthewire.org -p 2220
+    ```
+    This command establishes a secure shell connection to the bandit19 server. You will be prompted for the password for bandit19, which is `cGWpMaKXVwDUNgPAVJbWYuGHVn9zl3j8`.
+
+2.  **List the contents of the home directory:**
+    ```bash
+    ls -l
+    ```
+    This command lists the files and directories in the current directory (bandit19's home directory) with detailed information, including permissions. You likely observed an executable file named `bandit20-do` with the SUID bit set (indicated by an `s` in the owner's execute permissions, e.g., `-rwsr-xr-x`).
+
+3.  **Execute the `bandit20-do` binary:**
+    ```bash
+    ./bandit20-do
+    ```
+    Running the binary without any arguments might have provided some usage information or simply done nothing noticeable.
+
+4.  **Experiment with the `id` command:**
+    ```bash
+    ./bandit20-do id
+    ```
+    Executing `bandit20-do` with the `id` command as an argument likely showed that the command was executed with the privileges of the owner of the `bandit20-do` file (which is probably bandit20 due to the SUID bit).
+
+5.  **Further attempt with `id` (likely a repetition or confirmation):**
+    ```bash
+    ./bandit20-do id
+    ```
+    This reiterates the previous step, confirming the elevated privileges.
+
+6.  **Exploit the SUID bit to read the bandit20 password file:**
+    ```bash
+    ./bandit20-do euid=11020 cat /etc/bandit_pass/bandit20
+    ```
+    The key insight here is to leverage the SUID bit of `bandit20-do`. Since it runs with the effective user ID (euid) of the file owner (likely bandit20, whose user ID is 11020 based on the level numbering), you can manipulate the environment in which `cat` is executed. By setting the `euid` environment variable within the context of `bandit20-do`, you can trick the program into running `cat /etc/bandit_pass/bandit20` with bandit20's privileges, allowing you to read the password.
+
+7.  **Retrieve the password for bandit20:**
+    The output of the previous command reveals the password for bandit20:
+    ```
+    0qXahG8ZjOVMN9Ghs7iOWsCfZyXOUbYO
+    ```
+
+**Conclusion:**
+
+The password for bandit level 20 (`0qXahG8ZjOVMN9Ghs7iOWsCfZyXOUbYO`) was obtained by exploiting a Set-User-ID (SUID) vulnerability in the `bandit20-do` executable. By leveraging the elevated privileges granted by the SUID bit and using the `euid` environment variable, we were able to execute the `cat` command with the permissions of the bandit20 user and read the contents of the `/etc/bandit_pass/bandit20` file.

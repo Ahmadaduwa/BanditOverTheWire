@@ -1,0 +1,61 @@
+# OverTheWire Bandit Level 20 → Level 21
+
+**Difficulty:** - (Medium, involving network communication and understanding local exploits)
+**Category:** Network Exploitation
+
+**Challenge Goal:** Obtain the password for the bandit21 user.
+
+**Tools Used:**
+
+* `ssh`
+* `ls`
+* `nc` (netcat)
+* A provided executable (`./suconnect`)
+
+**Steps to Solve:**
+
+1.  **Access bandit20 via SSH (in two terminal windows):**
+    ```bash
+    ssh bandit20@bandit.labs.overthewire.org -p 2220
+    ```
+    You establish an SSH connection to the bandit20 server in two separate terminal windows. You will be prompted for the password for bandit20, which is `0qXahG8ZjOVMN9Ghs7iOWsCfZyXOUbYO`.
+
+2.  **Terminal 1: List directory contents:**
+    ```bash
+    ls -l
+    ```
+    In the first terminal, you list the files in the current directory. You likely found an executable file named `suconnect`.
+
+3.  **Terminal 1: Execute `suconnect` without arguments:**
+    ```bash
+    ./suconnect
+    ```
+    Running `suconnect` without any arguments probably showed some usage instructions or indicated that it expects a port number as an argument.
+
+4.  **Terminal 2: Set up a netcat listener:**
+    ```bash
+    nc -l 9999
+    ```
+    In the second terminal, you use `netcat` (`nc`) to set up a listener on port 9999. The `-l` option tells `nc` to listen for incoming connections.
+
+5.  **Terminal 1: Execute `suconnect` with the listening port:**
+    ```bash
+    ./suconnect 9999
+    ```
+    In the first terminal, you execute the `suconnect` program, providing the port number 9999 as an argument. This likely caused `suconnect` to attempt a connection to `localhost` (or a similar local address) on the specified port.
+
+6.  **Terminal 1: Enter the bandit20 password:**
+    ```
+    enter 0qXahG8ZjOVMN9Ghs7iOWsCfZyXOUbYO
+    ```
+    The `suconnect` program likely prompted for the current password (for bandit20). Upon entering the correct password, it probably established a connection to the `nc` listener in the second terminal and sent the password for the next level.
+
+7.  **Terminal 2: Retrieve the password for bandit21:**
+    In the second terminal, where `nc` was listening, you would have received the password for bandit21:
+    ```
+    EeoULMCra2q0dSkYj561DX7s1CpBuOBt
+    ```
+
+**Conclusion:**
+
+The password for bandit level 21 (`EeoULMCra2q0dSkYj561DX7s1CpBuOBt`) was obtained by exploiting a local program (`suconnect`) that likely attempts to establish a network connection and transmit sensitive information after receiving the correct current password. By setting up a local `netcat` listener, we intercepted this transmitted information and retrieved the password for the next level.

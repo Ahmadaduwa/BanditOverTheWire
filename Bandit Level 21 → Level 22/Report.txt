@@ -1,12 +1,15 @@
 # OverTheWire Bandit Level 21 → Level 22
 
-**Difficulty:** - 
-**Category:** 
-**Challenge Goal:** 
+**Difficulty:** - (Medium, requires understanding cron jobs and shell scripts)
+**Category:** Scheduled Tasks / Cron Jobs
+
+**Challenge Goal:** Obtain the password for the bandit22 user.
 
 **Tools Used:**
 
-
+* `ssh`
+* `ls`
+* `cat`
 
 **Steps to Solve:**
 
@@ -14,10 +17,50 @@
     ```bash
     ssh bandit21@bandit.labs.overthewire.org -p 2220
     ```
-    
+    Establish a secure shell connection to the bandit21 server using the password `EeoULMCra2q0dSkYj561DX7s1CpBuOBt`.
 
+2.  **List scheduled cron jobs:**
+    ```bash
+    ls /etc/cron.d/
+    ```
+    Investigate the `/etc/cron.d/` directory, which is a common location for system-wide cron jobs. 
+    This reveals files defining scheduled tasks for different Bandit levels.
 
+3.  **Examine the bandit22 cron job file:**
+    ```bash
+    cat /etc/cron.d/cronjob_bandit22
+    ```
+    Read the contents of the `cronjob_bandit22` file. This file defines when and how the script 
+    for this level's challenge is executed. It typically shows the schedule and the path to the executable script.
+
+4.  **Inspect the cron job script:**
+    ```bash
+    cat /usr/bin/cronjob_bandit22.sh
+    ```
+    Read the contents of the script executed by the cron job. This script contains the logic 
+    that runs periodically. It is common for these scripts to perform actions related to the 
+    next level's password. In this case, the script likely reads the current level's password
+     and writes the next level's password to a specific location, often a temporary file with a 
+     predictable or generated name. The script's output or comments would reveal the location of the next password.
+
+5.  **Retrieve the password from the temporary file:**
+    ```bash
+    cat /tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv
+    ```
+    Based on the information found in the cron job script (`/usr/bin/cronjob_bandit22.sh`),
+     navigate to the temporary file where the password for bandit22 is stored and read its 
+     contents using `cat`. The script indicated the password was written to `/tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv`.
+
+6.  **Obtain the password for bandit22:**
+    The output of the previous command is the password for the next level:
+    ```
+    tRae0UfB9v0UzbCdn9cY0gQnds9GF58Q
+    ```
 
 **Conclusion:**
 
-EeoULMCra2q0dSkYj561DX7s1CpBuOBt
+The password for bandit level 22 (`tRae0UfB9v0UzbCdn9cY0gQnds9GF58Q`) was found by 
+examining the system's scheduled tasks. By inspecting the cron job file for bandit22 
+(`/etc/cron.d/cronjob_bandit22`) and the script it executes (`/usr/bin/cronjob_bandit22.sh`),
+ we discovered that the script periodically writes the bandit22 password to a temporary file 
+ (`/tmp/t7O6lds9S0RqQh9aMcz6ShpAoZKF7fgv`), from which we were able to retrieve it.

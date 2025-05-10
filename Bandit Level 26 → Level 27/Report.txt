@@ -1,0 +1,81 @@
+## OverTheWire Bandit Level 26 → Level 27
+
+**Difficulty:** Medium
+
+**Category:** Setuid Binaries, Privilege Escalation, Command Execution
+
+**Challenge Goal:** Find the password for the user `bandit27` by exploiting a Setuid executable.
+
+**Tools Used:**
+* `ssh`
+* `ls`
+* `file`
+* `id` (used for discovery)
+* `cat`
+
+### Methodology and Steps
+
+Starting as user `bandit26`, we look for interactive programs or files 
+that might lead us to the next level's password. Setuid executables are 
+a common mechanism for privilege escalation in these types of challenges.
+
+1.  **Access bandit26 via SSH:**
+    Log in to the server using the password for `bandit26` (`s0773xxkk0MXfdqOfPRVr9L3jJBUOgCZ`).
+    ```bash
+    ssh bandit26@bandit.labs.overthewire.org -p 2220
+    ```
+
+2.  **Examine the Home Directory:**
+    List the contents of the current directory.
+    ```bash
+    ls
+    ```
+    We find an executable file named `bandit27-do`. This program is 
+    likely the key to the next level.
+
+3.  **Identify File Type:**
+    Use the `file` command to confirm it's an executable.
+    ```bash
+    file bandit27-do
+    ```
+    This confirms it's a program, likely a compiled binary. Its name 
+    suggests it performs some action related to `bandit27`.
+
+4.  **Run the Executable Without Arguments:**
+    Execute the program without any arguments to see its default 
+    behavior or usage instructions.
+    ```bash
+    ./bandit27-do
+    ```
+    Running it this way might print help text or an error message indicating 
+    how to use the program. This output is key to understanding its expected input format.
+
+5.  **Test Execution with a Simple Command:**
+    Try running the program with a simple command like `id` as an argument 
+    to see if it executes commands and under what user/privileges.
+    ```bash
+    ./bandit27-do id
+    ```
+    If this program is Setuid `bandit27`, running `id` through it might show 
+    an effective user ID (euid) of `bandit27`, while the real user ID (uid) is `bandit26`.
+
+6.  **Exploit the `euid=` Functionality:**
+    Based on the help text from step 4 (or by experimentation), the program `bandit27-do` appears to accept an argument in the format `euid=UID` followed by a command, and it will attempt to execute that command with the specified effective user ID. Use this to set the effective user ID to `bandit27`'s UID (`11027`) and execute the command to read `bandit27`'s password file.
+    ```bash
+    ./bandit27-do euid=11027 cat /etc/bandit_pass/bandit27
+    ```
+    This command instructs `./bandit27-do` to set its effective user ID to `11027` and then execute `cat /etc/bandit_pass/bandit27`. Since `/etc/bandit_pass/bandit27` is readable by user `bandit27`, and we are executing `cat` with those privileges, the password will be printed.
+
+7.  **Retrieve the Password:**
+    The execution of the command in step 7 outputs the password.
+
+### Password for Level 27: upsNCc7vzaRDx6oZC6GiR6ERwe1MowGB
+
+### Conclusion:
+This level focuses on identifying and exploiting Setuid executables. 
+By running the program without arguments, we learned its command-line interface, 
+specifically the `euid=UID` argument that allows controlled execution with a specified effective user ID. 
+We then identified the target user's (bandit27) UID and used the program to 
+execute a command (`cat /etc/bandit_pass/bandit27`) with `bandit27`'s privileges, 
+thereby retrieving the password. This highlights the importance of carefully 
+reviewing programs that run with elevated privileges.

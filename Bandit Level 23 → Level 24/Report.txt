@@ -1,0 +1,162 @@
+## OverTheWire Bandit Level 23 → Level 24
+
+**Difficulty:** Medium
+
+**Category:** Cron Jobs, Scripting, File Permissions, Exploitation
+
+**Challenge Goal:** Find the password for the user `bandit24` by exploiting a scheduled script running as that user.
+
+**Tools Used:**
+* `ssh`
+* `ls`
+* `cat`
+* `nano` or other text editor
+* `chmod`
+* `cp`
+* `stat` (implicitly used by the cron script)
+* `timeout` (implicitly used by the cron script)
+
+### Methodology and Steps
+We start this level as user `bandit23` with the password found in the previous level. 
+The goal is to find the password for the user `bandit24`. As in the previous level, 
+checking for Cron Jobs is a good starting point, as they often perform actions that 
+might reveal information or provide an avenue for exploitation.
+
+1.  **Access via SSH:**
+    Use the password for `bandit23` (`0Zf11ioIjMVN551jX3CmStKLYqjk54Ga`) to log in.
+    ```bash
+    ssh bandit23@bandit.labs.overthewire.org -p 2220
+    ```
+
+2.  **Explore Cron Jobs:**
+    List the files in the `/etc/cron.d/` directory to find scheduled tasks.
+    ```bash
+    ls /etc/cron.d/
+    ```
+    We again see a file relevant to the next level: `cronjob_bandit24`.
+
+3.  **Inspect the Cron Job File:**
+    View the content of `/etc/cron.d/cronjob_bandit24` to understand its configuration.
+    ```bash
+    cat /etc/cron.d/cronjob_bandit24
+    ```
+    This file reveals that the script `/usr/bin/cronjob_bandit24.sh` is executed periodically (`* * * * *`) by the user `bandit24`.
+
+4.  **Analyze the Script:**
+    Examine the content of the script `/usr/bin/cronjob_bandit24.sh` to understand its functionality.
+    ```bash
+    cat /usr/bin/cronjob_bandit24.sh
+    ```
+    The script is as follows:
+    ```bash
+    #!/bin/bash
+
+    myname=$(whoami)
+
+    cd /var/spool/$myname/foo
+    echo "Executing and deleting all scripts in /var/spool/$myname/foo:"
+    for i in * .*;
+    do
+        if [ "$i" != "." -a "$i" != ".." ];
+        then
+            echo "Handling $i"
+            owner="$(stat --format "%U" ./$i)"
+            if [ "${owner}" = "bandit23" ]; then
+                timeout -s 9 60 ./$i
+            fi
+            rm -f ./$i
+        fi
+    done
+    ```
+
+5.  **Understand the Script Logic:**
+    * The script runs as user `bandit24` (`myname` will be `bandit24`).
+    * It changes the current directory to `/var/spool/bandit24/foo`.
+    * It then loops through all files (`* .*;`) in this directory, skipping `.` and `..`.
+    * For each file, it checks the file's owner using `stat --format "%U"`.
+    * **Crucially:** It *only* executes the file (`./$i`) if the owner of the file is `bandit23`. 
+    The execution is done with a 60-second timeout using `timeout -s 9 60`.
+    * After checking and potentially executing, the script *deletes* the file (`rm -f ./$i`),
+     regardless of whether it was executed or not.
+
+    The vulnerability lies in the script running as `bandit24` and executing files 
+    *owned by `bandit23`* placed in `/var/spool/bandit24/foo`. This means we, as 
+    `bandit23`, can place a script in that directory, and the cron job running as 
+    `bandit24` will execute it for us.
+
+6.  **Prepare an Exploit Script:**
+    We need to create a script that, when executed by `bandit24`, will capture the 
+    `bandit24` password. A simple way is to copy the password file `/etc/bandit_pass/bandit24` 
+    to a location we can read, like a temporary file in `/tmp/`.
+
+    First, create a temporary directory to work in:
+    ```bash
+    mkdir /tmp/exploit24
+    cd /tmp/exploit24
+    ```
+    Create two files: one for our script (`getpass.sh`) and one where 
+    the password will be saved (`bandit24_password`).
+    ```bash
+    touch getpass.sh
+    touch bandit24_password
+    ```
+    Edit the script file (`getpass.sh`) using `nano` or 
+    your preferred editor:
+    ```bash
+    nano getpass.sh
+    ```
+    Add the following content to `getpass.sh`:
+    ```bash
+    #!/bin/bash
+    # This script is executed by bandit24 via cron
+    # Copy the bandit24 password to a readable location
+    cat /etc/bandit_pass/bandit24 > /tmp/exploit24/bandit24_password
+    ```
+    Save and exit the editor.
+
+7.  **Set Permissions (Optional but good practice):**
+    Ensure the script is executable and the output file is writable by us 
+    (and potentially the cron job, although ownership is the key filter). 
+    Setting broad permissions on the temporary directory and its contents simplifies things.
+    ```bash
+    chmod 777 -R /tmp/exploit24
+    ```
+    *Note: The critical factor for the cron script's execution check is 
+    that `getpass.sh` must be owned by `bandit23`. Since we created it 
+    while logged in as `bandit23`, it will have the correct ownership.*
+
+8.  **Place the Script in the Watched Directory:**
+    Copy our exploit script (`getpass.sh`) into the directory 
+    `/var/spool/bandit24/foo/`. Since we are logged in as `bandit23`, 
+    and the target directory `/var/spool/bandit24/foo` seems writable by 
+    `bandit23` (implied by the challenge structure), the copied file will 
+    be owned by `bandit23`, satisfying the cron script's condition.
+    ```bash
+    cp getpass.sh /var/spool/bandit24/foo/
+    ```
+
+9.  **Wait for the Cron Job to Execute:**
+    The cron job runs periodically (usually every minute). Wait for a minute 
+    or so for the cron script to execute, find our script (owned by `bandit23`), 
+    run it, and then delete it.
+
+10. **Retrieve the Password:**
+    After waiting, the `getpass.sh` script, executed by `bandit24`, 
+    should have copied the password into `/tmp/exploit24/bandit24_password`. 
+    Read the content of this file.
+    ```bash
+    cat /tmp/exploit24/bandit24_password
+    ```
+    This command will display the password for `bandit24`.
+
+### Password for Level 24: gb8KRRCsshuZXI0tUuR6ypOFjiZbf3G8
+
+### Conclusion:
+This level demonstrates how to exploit a system where a script running 
+with elevated privileges (or as a different user) monitors a directory 
+writable by a lower-privileged user and executes files based on specific 
+criteria (in this case, file ownership). By understanding the script's logic 
+and its execution environment, we could craft and place a malicious script 
+that would be automatically executed by the `bandit24` user, allowing us to 
+retrieve their password. The key takeaway is to carefully analyze scheduled 
+tasks and identify opportunities where we can influence their execution.

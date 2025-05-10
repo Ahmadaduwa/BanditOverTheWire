@@ -1,0 +1,96 @@
+## OverTheWire Bandit Level 22 → Level 23
+
+**Difficulty:** hard
+
+**Category:** Cron Jobs, Scripting, File Permissions
+
+**Challenge Goal:** Find the password for the user `bandit23` to access the next level.
+
+**Tools Used:**
+* `ssh`
+* `ls`
+* `cat`
+* `echo`
+* `md5sum`
+* `cut`
+
+### Methodology and Steps
+In this level, we start as user `bandit22`. The goal is to find the password for user `bandit23`
+ to proceed to the next level. Based on previous levels or OverTheWire hints, one of the things we
+  should check is Cron Jobs, which often contain scheduled tasks that might reveal useful information.
+
+1.  **Access via SSH:**
+    Use the password for `bandit22` (`tRae0UfB9v0UzbCdn9cY0gQnds9GF58Q`) to log in.
+    ```bash
+    ssh bandit22@bandit.labs.overthewire.org -p 2220
+    ```
+
+2.  **Explore Cron Jobs:**
+    Check the directory `/etc/cron.d/` which is a standard location for system-wide Cron Job files.
+    ```bash
+    ls /etc/cron.d/
+    ```
+    The output shows several files, including `cronjob_bandit23`, which is likely related to this level.
+
+3.  **Inspect the Cron Job File:**
+    View the content of `/etc/cron.d/cronjob_bandit23` to understand what this Cron Job does.
+    ```bash
+    cat /etc/cron.d/cronjob_bandit23
+    ```
+    This file will show that the script `/usr/bin/cronjob_bandit23.sh` is executed regularly by the user `bandit23`.
+
+4.  **Analyze the Script:**
+    View the content of the script `/usr/bin/cronjob_bandit23.sh` to understand its logic.
+    ```bash
+    cat /usr/bin/cronjob_bandit23.sh
+    ```
+    The script content is:
+    ```bash
+    #!/bin/bash
+    myname=$(whoami)
+    mytarget=$(echo I am user $myname | md5sum | cut -d ' ' -f 1)
+    echo "Copying passwordfile /etc/bandit_pass/$myname to /tmp/$mytarget"
+    cat /etc/bandit_pass/$myname > /tmp/$mytarget
+    ```
+
+5.  **Understand the Script Logic:**
+    * `myname=$(whoami)`: This command gets the username of the user currently running 
+    the script. From the Cron Job in step 3, we know this script runs as user `bandit23`, so `$myname` will be `bandit23`.
+    * `mytarget=$(echo I am user $myname | md5sum | cut -d ' ' -f 1)`: This command 
+    creates the string "I am user [username]" (which is "I am user bandit23"), then 
+    calculates its MD5 hash, and uses the `cut` command to extract only the first 
+    field (the hash value itself). This hash value is stored in the variable `mytarget` 
+    and will be used as a temporary filename.
+    * `cat /etc/bandit_pass/$myname > /tmp/$mytarget`: This command reads the content 
+    from the password file for user `$myname` (which is `/etc/bandit_pass/bandit23`) and
+    writes that content into a file named after the value of `$mytarget` in the `/tmp/` directory.
+
+6.  **Find the Temporary File Path:**
+    Based on the script's logic, we need to know the exact name of the file in 
+    `/tmp/` where the password is copied. We can simulate the hash calculation 
+    using the username `bandit23`:
+    ```bash
+    echo "I am user bandit23" | md5sum | cut -d ' ' -f 1
+    ```
+    The result is `8ca319486bfbbc3663ea0fbe81326349`. Therefore, the password 
+    file is copied to `/tmp/8ca319486bfbbc3663ea0fbe81326349`.
+
+7.  **Read the Password:**
+    Finally, read the content of the temporary file we found to retrieve 
+    the password for the user `bandit23`.
+    ```bash
+    cat /tmp/8ca319486bfbbc3663ea0fbe81326349
+    ```
+    This command will output the password.
+
+### Password for Level 23: 0Zf11ioIjMVN551jX3CmStKLYqjk54Ga
+
+### Conclusion:
+This level teaches us to inspect Cron Jobs running on the 
+system, which are a common way administrators automate tasks. 
+Understanding which Cron Job runs as which user and analyzing 
+the logic of the executed script is crucial for finding passwords 
+or other sensitive information that might be generated or copied 
+to unexpected locations. In this case, the script copied the password 
+to a temporary file named based on an MD5 hash, which we could calculate 
+to find the file's location.

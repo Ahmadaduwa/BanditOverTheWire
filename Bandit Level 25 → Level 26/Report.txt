@@ -1,0 +1,93 @@
+## OverTheWire Bandit Level 25 → Level 26 
+
+**Difficulty:** Medium
+
+**Category:** SSH, Restricted Shells, Text Editor Exploitation
+
+**Challenge Goal:** Find the password for the user `bandit26` by 
+using a provided SSH key and escaping a restricted environment.
+
+**Tools Used:**
+* `ssh`
+* `ls`
+* `grep`
+* `cat`
+* `vi`/`vim` (exploited via the restricted program)
+
+### Methodology and Steps
+We begin as user `bandit25`. The challenge provides us with a file that appears to 
+be an SSH key for the next level. We need to use this key to access `bandit26` and then 
+find their password, likely by navigating a restricted environment.
+
+1.  **Access bandit25 via SSH:**
+    Log in to the server using the password for `bandit25` (`iCi86ttT4KSNe1armKiwbQNmB3YJP3q4`).
+    ```bash
+    ssh bandit25@bandit.labs.overthewire.org -p 2220
+    ```
+
+2.  **Examine the Home Directory:**
+    List the contents of the current directory upon logging in.
+    ```bash
+    ls
+    ```
+    We see a file named `bandit26.sshkey`. This is almost certainly the private key
+     required to log in as `bandit26`.
+
+3.  **Attempt to SSH as bandit26 using the Key:**
+    Try to log in as user `bandit26` on `localhost` (since Bandit levels usually 
+    require local access before external) using the discovered SSH key.
+    ```bash
+    ssh -i bandit26.sshkey bandit26@localhost -p 2220
+    ```
+    This command should successfully log you in, but you will likely land in a restricted 
+    environment, not a standard shell. The prompt or the output might look unusual.
+
+4.  **Investigate the User's Shell (Optional but good practice):**
+    While logged in as `bandit23` (in a separate session or before logging in as `bandit26`), 
+    you could check the shell assigned to `bandit26` in `/etc/passwd`.
+    ```bash
+    grep bandit26 /etc/passwd
+    ```
+    This would likely show that `bandit26`'s shell is set to a custom program, such as `/usr/bin/showtext`.
+
+5.  **Inspect the Restricted Program:**
+    View the content or description of the program assigned as `bandit26`'s shell (e.g., `/usr/bin/showtext`).
+    ```bash
+    cat /usr/bin/showtext
+    ```
+    Looking at the code for `/usr/bin/showtext` would reveal that it's likely a script or 
+    program designed to display a specific text file, often using a text editor like `vi` or `vim` in read-only mode.
+
+6.  **Exploit the Text Editor:**
+    When you SSH into `bandit26` using the key (Step 3), the `/usr/bin/showtext` program 
+    executes and presents you with text within what appears to be a text editor interface 
+    (like `vi` or `vim`). The program restricts what you can do, but the underlying editor 
+    itself has powerful features, including the ability to escape to a shell.
+
+    * Ensure you are in command mode (press `Esc`).
+    * Press `v`. This might enter visual mode or, in some restricted setups, break into a 
+    state where standard editor commands are available.
+    * Enter the command `:set shell=/bin/bash`. This is a standard `vi`/`vim` command that 
+    changes the default shell used for shell escapes to `/bin/bash`. Type `:` followed by `set shell=/bin/bash` and press `Enter`.
+    * Enter the command `:shell`. This is another standard `vi`/`vim` command that executes 
+    the shell defined by the `shell` option. Type `:` followed by `shell` and press `Enter`.
+
+    This sequence should drop you into a standard bash shell running as the user `bandit26`.
+
+7.  **Retrieve the Password:**
+    Now that you have a full shell as `bandit26`, you can read their password file.
+    ```bash
+    cat /etc/bandit_pass/bandit26
+    ```
+    This command will output the password for the next level.
+
+### Password for Level 26: s0773xxkk0MXfdqOfPRVr9L3jJBUOgCZ
+
+### Conclusion:
+This level teaches the importance of using provided credentials (the SSH key) 
+and recognizing restricted shell environments. By inspecting the program that 
+serves as the restricted shell (`/usr/bin/showtext`) and identifying that it 
+utilizes an interactive text editor like `vi` or `vim`, we can leverage the
+editor's built-in shell escape features (`:set shell` and `:shell`) to break 
+out of the restricted environment and gain access to a standard shell under 
+the `bandit26` user, allowing us to retrieve the password.

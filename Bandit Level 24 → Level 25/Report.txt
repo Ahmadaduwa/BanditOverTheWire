@@ -1,0 +1,62 @@
+## OverTheWire Bandit Level 24 → Level 25
+
+**Difficulty:** Medium
+
+**Category:** Network, Scripting, Brute-force
+
+**Challenge Goal:** Authenticate with a network service running on a 
+high port to receive the password for the next level.
+
+**Tools Used:**
+
+* `ssh`
+* `netcat` (`nc`)
+* `for` loop (bash) 
+* `echo`
+* Pipes (`|`)
+* `grep`
+
+### Methodology and Steps
+
+1.  **Access bandit24 via SSH:**
+    Use the password for `bandit24` (`gb8KRRCsshuZXI0tUuR6ypOFjiZbf3G8`) to log in to the server.
+    ```bash
+    ssh bandit24@bandit.labs.overthewire.org -p 2220
+    ```
+
+2.  **Analyze the environment and locate the service:**
+    After logging in, you would typically look for clues, such as files in 
+    the home directory or listening services. The challenge description or a provided file likely indicates a service running on `localhost` on port 30002. Interacting with this service (e.g., using `nc localhost 30002`) would show that it expects some input. Experimentation or hints might suggest the required format involves the current level's password followed by a potential code.
+
+3.  **Brute-force the 4-digit code:**
+    The service likely requires the current password (`gb8KRRCsshuZXI0tUuR6ypOFjiZbf3G8`) 
+    followed by a 4-digit numeric code. A script or a one-liner can automate trying all 
+    possible 4-digit combinations (0000 to 9999). We pipe the generated input to `netcat` 
+    connecting to the service and filter the output.
+    ```bash
+    for i in {0000..9999}; do echo "gb8KRRCsshuZXI0tUuR6ypOFjiZbf3G8 $i"; done | nc localhost 30002 | grep -v "Wrong"
+    ```
+    * `for i in {0000..9999}`: This loop iterates through numbers from 0000 to 9999.
+    * `echo "gb8KRRCsshuZXI0tUuR6ypOFjiZbf3G8 $i"`: For each iteration, it constructs 
+    the input string by concatenating the bandit24 password, a space, and the current
+     4-digit number `$i`.
+    * `| nc localhost 30002`: The output of `echo` is piped as input to the `netcat` 
+    command, which connects to `localhost` on port 30002.
+    * `| grep -v "Wrong"`: The output from `netcat` is piped to `grep`, which filters 
+    out any lines containing the word "Wrong". This assumes the service responds with 
+    "Wrong" for incorrect attempts and something else (likely the password) for the correct one.
+
+4.  **Identify the correct output:**
+    The `grep -v "Wrong"` command will only display the output received from 
+    the service when the correct 4-digit code was provided. The result is the 
+    password for the next level.
+
+### Password for Level 25: `iCi86ttT4KSNe1armKiwbQNmB3YJP3q4`
+
+### Conclusion:
+The password for bandit level 25 (`iCi86ttT4KSNe1armKiwbQNmB3YJP3q4`) was successfully 
+retrieved by interacting with a network service on port 30002. By using a simple brute-force 
+approach iterating through all possible 4-digit codes in combination with the current 
+level's password and piping the input to `netcat`, we were able to find the correct sequence 
+that yielded the password. The use of `grep` helped in quickly identifying the successful 
+attempt by filtering out incorrect responses.

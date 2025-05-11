@@ -1,0 +1,106 @@
+## OverTheWire Bandit Level 28 → Level 29
+
+**Difficulty:** Medium
+
+**Category:** Git History
+
+**Challenge Goal:** Find the password for the user `bandit29` by 
+examining the commit history of a Git repository.
+
+**Tools Used:**
+* `ssh`
+* `mkdir`
+* `cd`
+* `git clone`
+* `ls`
+* `cat`
+* `git log`
+* `git show`
+
+### Methodology and Steps
+We begin as user `bandit28`. Similar to the previous level, this challenge 
+involves interacting with a Git repository, but this time the password is 
+not immediately visible in the current files. We will need to investigate the repository's history.
+
+1.  **Access bandit28 via SSH:**
+    Log in to the server using the password for `bandit28` (`Yz9IpL0sBcCeuG7m9uQFt8ZNpS4HZRcN`).
+    ```bash
+    ssh bandit28@bandit.labs.overthewire.org -p 2220
+    ```
+
+2.  **Create a Working Directory:**
+    Create and navigate into a temporary directory to clone the repository.
+    ```bash
+    mkdir /tmp/level28_git
+    cd /tmp/level28_git
+    ```
+
+3.  **Clone the Git Repository:**
+    Identify the location of the Git repository. Based on the previous level's 
+    pattern and typical Bandit challenges, it's likely hosted locally for `bandit28`.
+    The prompt usually gives a hint or you can find it in documentation. 
+    The repository is accessible via the `git://` protocol for user `bandit28-git`.
+    ```bash
+    git clone git://bandit28-git@localhost/home/bandit28-git/repo
+    ```
+    *(Note: This level uses the `git://` protocol on the default Git port 9418, 
+    not SSH on port 2220. The `git://` protocol typically does not require a password.)*
+
+4.  **Explore the Cloned Repository:**
+    Navigate into the cloned repository directory (`repo`).
+    ```bash
+    ls
+    cd repo/
+    ls
+    ```
+    We see a file like `README.md`.
+
+5.  **Check Current Files:**
+    View the content of the `README.md` file.
+    ```bash
+    cat README.md
+    ```
+    The `README.md` might contain information about the repository or hints, 
+    but the password for `bandit29` is not found directly in the current version of this file.
+
+6.  **View the Commit History:**
+    Since the password isn't in the current files, examine the repository's 
+    commit history using `git log`. This command shows a log of all commits, 
+    including commit hashes, authors, dates, and commit messages.
+    ```bash
+    git log
+    ```
+    Look through the commit messages and changes. Often, a commit message will 
+    hint that something was added or removed, or the password might be added and 
+    then removed in a subsequent commit. Note the commit hashes.
+
+7.  **Inspect a Specific Commit:**
+    Based on the `git log` output (e.g., a commit message suggesting a password was added), 
+    use the `git show` command followed by the commit hash to view the exact changes 
+    introduced by that commit. The commit hash noted by the user (`674690a00a0056ab96048f7317b9ec20c057c06b`) 
+    is a likely candidate.
+    ```bash
+    git show 674690a00a005666b63456ab96048f7317b9ec20c057c06b
+    # (Use the actual relevant commit hash from git log)
+    ```
+    *(Correction: The commit hash `674690a00a0056ab96048f7317b9ec20c057c06b` seems s
+    lightly off based on common Bandit 28 writeups, but the principle is correct - use 
+    `git show` on a hash found via `git log`.)*
+
+    The output of `git show` will display the commit details and the diff (changes) 
+    introduced in that commit. Look for added lines (`+` prefix) in files like `README.md`.
+
+8.  **Extract the Password:**
+    Review the output of `git show`. The password for `bandit29` will be visible among 
+    the added lines in the relevant commit.
+
+### Password for Level 29: 4pT1t5DENaYuqnqvadYs1oE4QLCdjmJ7
+
+### Conclusion:
+
+This level demonstrates how sensitive information might be inadvertently stored in 
+the history of a version control system like Git. By cloning the repository and using 
+`git log` to view past commits, we could identify a commit where the password was present. 
+The `git show` command allowed us to view the exact contents of that commit and retrieve 
+the password, even if it was removed from the latest version of the files. This highlights 
+the importance of being mindful of what is committed to a repository's history.

@@ -1,0 +1,59 @@
+## OverTheWire Bandit Level 32 → Level 33
+
+**Difficulty:** Easy
+
+**Category:** Shells, Environment Variables
+
+**Challenge Goal:** Find the password for the user `bandit33` by understanding 
+and bypassing the specific shell configuration of `bandit32`.
+
+**Tools Used:**
+* `ssh`
+* `$0` (shell special parameter)
+* `cat`
+
+### Methodology and Steps
+We begin as user `bandit32`. Upon logging in, we find ourselves in a restricted 
+shell environment. The standard commands may not be available, 
+or the shell might behave in an unusual way. The goal is to break out 
+of this restriction to get a standard shell where we can read the password file.
+
+1.  **Access bandit32 via SSH:**
+    Log in to the server using the password for `bandit32` (`3O9RfhqyAlVBEZpVb6LYStshZoqoSx5K`).
+    ```bash
+    ssh bandit32@bandit.labs.overthewire.org -p 2220
+    ```
+    Upon successful login, you'll notice the environment is not a typical bash prompt.
+
+2.  **Execute the Shell Name:**
+    The special shell parameter `$0` holds the name of the script or command being executed. 
+    In some restricted shell setups (often implemented as a script that checks how it was called), 
+    executing `$0` again can bypass the restriction and give you a full shell. Simply type `$0` and press Enter.
+    ```bash
+    $0
+    ```
+    Executing `$0` in this specific environment will likely provide you with 
+    a standard shell prompt (like `bash`). The program acting as the shell for 
+    `bandit32` is designed to drop you into a full shell if called with its own name, 
+    which is what `$0` evaluates to when you execute it interactively like this.
+
+3.  **Retrieve the Password:**
+    Now that you have a standard shell as `bandit32`, you can use the `cat` 
+    command to read the password file for `bandit33`.
+    ```bash
+    cat /etc/bandit_pass/bandit33
+    ```
+    This command will output the password for the next level.
+
+4.  **Password Revealed:**
+    The output displays the password.
+
+### Password for Level 33: tQdtbs5D5i2vJwkO8mEyYEyTL8izoeJ0
+
+### Conclusion:
+This level is a classic Bandit trick leveraging how shell scripts identify themselves. 
+The shell for `bandit32` is a program that likely checks the value of the `$0` parameter. 
+When you initially log in, `$0` might be set to reflect the login process. However, 
+explicitly executing `$0` causes the program to be run with `$0` correctly identifying its own name, 
+which triggers a different execution path – specifically, providing a full shell. 
+Understanding the meaning of `$0` and common shell scripting patterns is key to solving this level.

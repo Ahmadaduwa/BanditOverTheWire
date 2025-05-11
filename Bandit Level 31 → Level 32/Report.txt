@@ -1,0 +1,106 @@
+## OverTheWire Bandit Level 31 → Level 32
+
+**Difficulty:** Medium
+
+**Category:** Git Push, Remote Hooks
+
+**Challenge Goal:** Find the password for the user `bandit32` by pushing a specific file with specific content to a Git repository.
+
+**Tools Used:**
+* `ssh`
+* `mkdir`
+* `cd`
+* `git clone`
+* `ls`
+* `cat`
+* `touch`
+* `nano` or other text editor
+* `git add`
+* `git commit`
+* `git push`
+
+### Methodology and Steps
+We begin as user `bandit31`. This level involves a Git repository where the password is revealed upon pushing a specific, 
+correctly formatted commit. We need to understand what content the remote repository expects.
+
+1.  **Access bandit31 via SSH:**
+    Log in to the server using the password for `bandit31` (`fb5S2xb7bRyFmAvQYQGEqsbhVyJqhnDy`).
+    ```bash
+    ssh bandit31@bandit.labs.overthewire.org -p 2220
+    ```
+
+2.  **Create a Working Directory:**
+    Create and navigate into a temporary directory to clone the repository.
+    ```bash
+    mkdir /tmp/level31_git_push
+    cd /tmp/level31_git_push
+    ```
+    (Using a slightly different directory name for clarity).
+
+3.  **Clone the Git Repository:**
+    Clone the repository accessible via SSH for the `bandit31-git` user on `localhost`. 
+    You will be prompted for a password; use the password for `bandit31`.
+    ```bash
+    git clone ssh://bandit31-git@localhost:2220/home/bandit31-git/repo
+    ```
+    Enter password: `fb5S2xb7bRyFmAvQYQGEqsbhVyJqhnDy`
+
+4.  **Explore the Repository and Instructions:**
+    Navigate into the cloned repository directory (`repo`) and examine the contents of the `README.md` file.
+    ```bash
+    cd repo/
+    cat README.md
+    ```
+    The `README.md` file contains instructions for this level. 
+    It typically tells you to push a file named `key.txt` containing the specific string "May I come in?".
+
+5.  **Create the Required File:**
+    Create a new file named `key.txt` in the repository directory.
+    ```bash
+    touch key.txt
+    ```
+
+6.  **Add the Required Content:**
+    Edit the `key.txt` file and add the exact string specified in the `README.md` ("May I come in?").
+    ```bash
+    echo "May I come in?" > key.txt
+    # or using nano:
+    # nano key.txt
+    # (type "May I come in?", save, and exit)
+    ```
+
+7.  **Stage the Change:**
+    Add the `key.txt` file to the Git staging area to prepare it for committing. 
+    Use the `-f` flag if needed, although typically not required for a new file unless it's listed in `.gitignore`.
+    ```bash
+    git add key.txt
+    ```
+
+8.  **Commit the Change:**
+    Commit the staged change with a relevant message.
+    ```bash
+    git commit -m "Added key.txt for bandit32"
+    ```
+
+9.  **Push the Commit:**
+    Push the committed change from your local repository to the remote `origin` (localhost) on the `master` branch. 
+    This is the action that triggers the password reveal.
+    ```bash
+    git push origin master
+    ```
+    You will be prompted for the `bandit31-git` password again; use the `bandit31` password (`fb5S2xb7bRyFmAvQYQGEqsbhVyJqhnDy`).
+
+10. **Retrieve the Password:**
+    After successfully pushing the commit containing the `key.txt` file with the correct content, 
+    the remote Git server's post-receive hook will process the push. If the conditions are met, 
+    it will print the password for `bandit32` as part of the output of the `git push` command.
+
+### Password for Level 32: 3O9RfhqyAlVBEZpVb6LYStshZoqoSx5K
+
+### Conclusion:
+This level demonstrates how a Git repository can be configured with server-side hooks that react to events like a `git push`. 
+By reading the instructions provided in the repository's `README.md`, 
+we learned what specific file and content were expected. Creating the required file, committing it, 
+and pushing it to the remote repository triggered the hook, 
+which then printed the password for the next level as output during the push process. 
+This highlights how Git can be used as an interaction mechanism beyond just version control.

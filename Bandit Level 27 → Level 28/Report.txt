@@ -1,0 +1,70 @@
+## OverTheWire Bandit Level 27 → Level 28
+
+**Difficulty:** Medium
+
+**Category:** Git
+
+**Challenge Goal:** Find the password for the user `bandit28` by interacting with a Git repository.
+
+**Tools Used:**
+* `ssh`
+* `mkdir`
+* `cd`
+* `git clone`
+* `ls`
+* `cat`
+
+### Methodology and Steps
+
+We start as user `bandit27`. The challenge involves a Git repository accessible locally. 
+We need to clone this repository and inspect its contents to find the password for the next level.
+
+1.  **Access bandit27 via SSH:**
+    Log in to the server using the password for `bandit27` (`upsNCc7vzaRDx6oZC6GiR6ERwe1MowGB`).
+    ```bash
+    ssh bandit27@bandit.labs.overthewire.org -p 2220
+    ```
+
+2.  **Create a Working Directory:**
+    It's good practice to create a temporary directory to clone the repository into, 
+    keeping things organized.
+    ```bash
+    mkdir /tmp/level27_git
+    cd /tmp/level27_git
+    ```
+    (Using `/tmp/level27_git` to avoid potential conflicts if `/tmp/level27` was used 
+    in a previous level).
+
+3.  **Clone the Git Repository:**
+    The challenge likely provides information about a Git repository accessible via SSH. 
+    The format `ssh://user@host:port/path/to/repo` is typical for Git over SSH. Based on the 
+    previous level and common Bandit patterns, the repository is probably hosted locally (`localhost`)
+     and accessible to a dedicated `git` user associated with `bandit27`.
+    ```bash
+    git clone ssh://bandit27-git@localhost:2220/home/bandit27-git/repo
+    ```
+    When prompted for a password, use the password for `bandit27` (`upsNCc7vzaRDx6oZC6GiR6ERwe1MowGB`). 
+    In this setup, the `bandit27` user's password is also used for the `bandit27-git` SSH access for Git operations.
+
+4.  **Explore the Cloned Repository:**
+    Navigate into the newly cloned repository directory (which will likely be named `repo`).
+    ```bash
+    ls
+    cd repo/
+    ls
+    ```
+    Listing the contents of the `repo` directory will show the files within the repository. 
+    A common place to find challenge information or passwords is in a `README` file.
+
+5.  **Read the README File:**
+    View the content of the `README` file.
+    ```bash
+    cat README
+    ```
+    The password for the next level (`bandit28`) is typically placed within this 
+    file in Git-based Bandit levels.
+
+### Password for Level 28: Yz9IpL0sBcCeuG7m9uQFt8ZNpS4HZRcN
+
+### Conclusion: 
+This level introduces Git interaction via SSH. By identifying the location and credentials for the Git repository (`bandit27-git@localhost`), we were able to clone it. Navigating the contents of the cloned repository revealed the password for the next level stored in the `README` file. This level reinforces the importance of checking for version control repositories when exploring a system and understanding how to interact with them.

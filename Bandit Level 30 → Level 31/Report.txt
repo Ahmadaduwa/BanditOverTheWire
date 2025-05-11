@@ -1,0 +1,87 @@
+## OverTheWire Bandit Level 30 → Level 31
+
+**Difficulty:** Medium
+
+**Category:** Git Tags
+
+**Challenge Goal:** Find the password for the user `bandit31` by exploring tags within a Git repository.
+
+**Tools Used:**
+* `ssh`
+* `mkdir`
+* `cd`
+* `git clone`
+* `ls`
+* `cat`
+* `git tag`
+* `git show`
+
+### Methodology and Steps
+We begin as user `bandit30`. This level again involves a Git repository, accessible via SSH. 
+The password is likely hidden within the repository's structure, 
+and given the sequence of Git challenges, exploring tags is a probable path forward.
+
+1.  **Access bandit30 via SSH:**
+    Log in to the server using the password for `bandit30` (`qp30ex3VLz5MDG1n91YowTv4Q8l7CDZL`).
+    ```bash
+    ssh bandit30@bandit.labs.overthewire.org -p 2220
+    ```
+
+2.  **Create a Working Directory:**
+    Create and navigate into a temporary directory to clone the repository.
+    ```bash
+    mkdir /tmp/level30_git_tags
+    cd /tmp/level30_git_tags
+    ```
+    (Using a slightly different directory name for clarity).
+
+3.  **Clone the Git Repository:**
+    Clone the repository accessible via SSH for the `bandit30-git` user on `localhost`. 
+    You will be prompted for a password; use the password for `bandit30`.
+    ```bash
+    git clone ssh://bandit30-git@localhost:2220/home/bandit30-git/repo
+    ```
+    Enter password: `qp30ex3VLz5MDG1n91YowTv4Q8l7CDZL`
+
+4.  **Explore the Default Branch:**
+    Navigate into the cloned repository directory (`repo`) and examine the contents 
+    of the `README.md` file on the default branch.
+    ```bash
+    cd repo/
+    cat README.md
+    ```
+    The password for `bandit31` is not found here.
+
+5.  **List All Tags:**
+    Since the password isn't in the current files or other branches (from previous levels), 
+    we check for Git tags. Tags are pointers to specific commits, 
+    often used to mark release points. Use the `git tag` command to list all tags in the repository.
+    ```bash
+    git tag
+    ```
+    This command will likely show a tag named `secret`.
+
+6.  **Inspect the Tag Content:**
+    Use the `git show` command followed by the tag name (`secret`) 
+    to view the object the tag points to (typically a commit). 
+    `git show` will display information about the tag and the commit it references, 
+    including the changes introduced in that commit.
+    ```bash
+    git show secret
+    ```
+    The output will show the commit details and the diff. 
+    Look for added lines (`+` prefix) which may contain the password.
+
+7.  **Retrieve the Password:**
+    Review the output of `git show secret`. The password for `bandit31` 
+    will be visible among the added lines in the commit pointed to by the `secret` tag.
+
+### Password for Level 31: fb5S2xb7bRyFmAvQYQGEqsbhVyJqhnDy
+
+### Conclusion:
+This level introduces Git tags as a way to hide information. By listing the 
+tags in the repository using `git tag` and then inspecting the content pointed 
+to by an interesting tag (like `secret`) using `git show`, 
+we were able to find the commit containing the password for the next level. 
+This demonstrates that sensitive information can be stored in various parts 
+of a Git repository's metadata, not just in branches or commit messages.

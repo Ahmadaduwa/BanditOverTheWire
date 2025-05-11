@@ -1,0 +1,88 @@
+## OverTheWire Bandit Level 29 → Level 30
+
+**Difficulty:** Medium
+
+**Category:** Git Branches
+
+**Challenge Goal:** Find the password for the user `bandit30` by exploring different branches within a Git repository.
+
+**Tools Used:**
+* `ssh`
+* `mkdir`
+* `cd`
+* `git clone`
+* `ls`
+* `cat`
+* `git branch`
+* `git checkout`
+
+### Methodology and Steps
+We begin as user `bandit29`. This level again involves a Git repository. 
+This time, the password is not readily found in the main branch or the commit history, 
+suggesting we need to look elsewhere within the repository structure – specifically, 
+in different branches.
+
+1.  **Access bandit29 via SSH:**
+    Log in to the server using the password for `bandit29` (`4pT1t5DENaYuqnqvadYs1oE4QLCdjmJ7`).
+    ```bash
+    ssh bandit29@bandit.labs.overthewire.org -p 2220
+    ```
+
+2.  **Create a Working Directory:**
+    Create and navigate into a temporary directory to clone the repository.
+    ```bash
+    mkdir /tmp/level29_git_branches
+    cd /tmp/level29_git_branches
+    ```
+    (Using a slightly different directory name for clarity).
+
+3.  **Clone the Git Repository:**
+    Clone the repository accessible via SSH for the `bandit29-git` user on `localhost`. 
+    You will be prompted for a password; use the password for `bandit29`.
+    ```bash
+    git clone ssh://bandit29-git@localhost:2220/home/bandit29-git/repo
+    ```
+    Enter password: `4pT1t5DENaYuqnqvadYs1oE4QLCdjmJ7`
+
+4.  **Explore the Default Branch:**
+    Navigate into the cloned repository directory (`repo`) and examine the contents of the `README.md` 
+    file on the default branch (usually `main` or `master`).
+    ```bash
+    cd repo/
+    cat README.md
+    ```
+    The password for `bandit30` is not found here.
+
+5.  **List All Branches:**
+    Use the `git branch -a` command to list all local and remote branches in the repository. 
+    This is the key step to discovering if there are branches other than the default.
+    ```bash
+    git branch -a
+    ```
+    This command will likely show the default branch (e.g., `main` or `master`) 
+    and other branches, such as `remotes/origin/dev`.
+
+6.  **Checkout a Different Branch:**
+    Switch your working copy to one of the newly discovered branches (e.g., the `dev` branch).
+    ```bash
+    git checkout dev
+    ```
+    *(Note: You checkout the remote branch `remotes/origin/dev` by specifying just `dev`.
+     Git understands you want to track the remote branch.)*
+
+7.  **Read the README File on the New Branch:**
+    After checking out the `dev` branch, the files in your working directory are updated 
+    to reflect the state of that branch. Read the `README.md` file again.
+    ```bash
+    cat README.md
+    ```
+    This time, the `README.md` file on the `dev` branch contains the password for `bandit30`.
+
+8.  **Retrieve the Password:**
+    The output of the `cat` command reveals the password.
+
+### Password for Level 30: qp30ex3VLz5MDG1n91YowTv4Q8l7CDZL
+
+### Conclusion:
+This level highlights the importance of exploring different branches in a Git repository. 
+Information or sensitive data might not always be present in the default branch (`main`/`master`) but could reside in development, feature, or other branches. Using `git branch -a` to discover all branches and `git checkout` to switch between them is essential for a thorough investigation of a Git repository.
